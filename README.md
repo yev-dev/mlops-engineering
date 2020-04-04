@@ -28,3 +28,8 @@ docker rm $(docker ps -a -f status=exited -q)
 #### To delete containers which are in created state
 
 docker rm $(docker ps -a -f status=created -q)
+
+
+### Troubleshooting
+
+docker history yevdeveloper/ml-ops
