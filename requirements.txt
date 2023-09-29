@@ -1,2 +1,10 @@
-pipenv
-seldon-core
+openai
+streamlit
+pandas
+requests
+numpy
+scipy
+sklearn
+jupyter
+matplotlib
+plotly
