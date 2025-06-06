@@ -9,14 +9,14 @@
             "type": "debugpy",
             "request": "launch",
             "module": "uvicorn",
-            "cwd": "${workspaceFolder}/code/src",
+            "cwd": "${workspaceFolder}/app/src",
             "args": [
-                "app.main:app",
+                "main:app",
                 "--reload",
                 "--host",
                 "0.0.0.0",
                 "--port",
-                "80"
+                "8000"
             ],
             "jinja": true
         },

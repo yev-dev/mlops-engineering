@@ -1,18 +1,57 @@
 import time
-from contextlib import asynccontextmanager
+import datetime
+import pandas as pd
+import json
+import datetime
+import pickle
+import os
 
+from contextlib import asynccontextmanager
 from typing import Optional, List
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware  # Import CORS middleware
 from pydantic import BaseModel
-import pandas as pd
-import json
-import datetime
-from app.models import univariate, multivariate, single_timeseries, multi_timeseries
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+PARENT_DIR = os.path.dirname(BASE_DIR)
+DATA_DIR = os.getenv("DATA_DIR", os.path.join(PARENT_DIR, "data"))
+
+if not os.path.exists(DATA_DIR):
+    raise FileNotFoundError(f"Data directory not found at {DATA_DIR}. Please ensure the data directory is available.")
+
+
+# Load the model from a pickle file
+model_path = os.path.join(DATA_DIR, "regression_model.pkl")
+
+try:
+    with open(model_path, "rb") as model_file:
+        loaded_model = pickle.load(model_file)
+except FileNotFoundError:
+    raise FileNotFoundError(f"Model file not found at {model_path}. Please ensure the model is available.") 
 
 app = FastAPI()
 
 
+class PredictionInput(BaseModel):
+    data: list
+
+
+@app.on_event("startup")
+async def startup_event():
+    print("Starting up the FastAPI application...")
+
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    print("Shutting down the FastAPI application...")
+
+# Lifespan context manager for startup and shutdown events
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("Application startup")
+    yield
+    print("Application shutdown")       
 
 @app.get("/")
 def doc():
@@ -22,9 +61,6 @@ def doc():
     }
 
 
-class PredictionInput(BaseModel):
-    data: list
-
 
 @app.post("/predict")
 async def predict(
@@ -32,26 +68,12 @@ async def predict(
     debug: bool = False):
     
     start_time = time.time()
+
     try:
 
-        data = pd.DataFrame(
-            columns=[
-                "fixed acidity",
-                "volatile acidity",
-                "citric acid",
-                "residual sugar",
-                "chlorides",
-                "free sulfur dioxide",
-                "total sulfur dioxide",
-                "density",
-                "pH",
-                "sulphates",
-                "alcohol",
-            ],
-            data=[data],
-        )
+        request_data = input_data.data
 
-        prediction = loaded_model.predict(data)
+        prediction = loaded_model.predict([input_data.data])[0]
 
     except Exception as e:
         raise e
@@ -64,6 +86,7 @@ async def predict(
         }
         if debug:
             print(f"Prediction took {elapsed_time:.2f} seconds")
+            
             results.update({"debug_elapsed_time": elapsed_time})
             
     return results
