@@ -1,8 +1,25 @@
-# Dockerfile for a Python application using Uvicorn
-# and FastAPI, with dependencies specified in requirements.txt.
-FROM python:3.11
-WORKDIR /code
-COPY ./requirements.txt /code/requirements.txt
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
-COPY ./src /code/app
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+FROM python:3.11-slim
+
+
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+    
+# Set the working directory inside the container
+# COPY ./requirements.txt /src/requirements.txt
+
+ENV PYTHONUNBUFFERED=1
+
+EXPOSE 5000
+
+WORKDIR /app/
+
+COPY . .
+
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+
+CMD ["uvicorn", "--host=0.0.0.0", "src.main:app", "--port=5000"]
+

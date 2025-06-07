@@ -76,6 +76,7 @@ docker run --name=ml-ops --rm -p 5000:5000 -d yevdeveloper/ml-ops:latest
 
 docker run --name=ml-ops -p 5000:5000 -d yevdeveloper/ml-ops:latest
 
+docker run --name=ml-ops -d yevdeveloper/ml-ops:latest
 
 
 #### Containers maintenance
@@ -87,16 +88,19 @@ docker run --name=ml-ops -p 5000:5000 -d yevdeveloper/ml-ops:latest
   ```
 
 * Login running docker container
+  
   ```bash
-  docker exec -it ml-ops  bash
+  docker exec -it yevdeveloper/ml-ops  bash
   ```
 
 * Stopping containers
+  
   ```bash
   docker stop $(docker ps -a -q)
   ```
 
 * Removing containers
+  
   ```bash
   docker rm $(docker ps -a -q)
 
@@ -104,7 +108,19 @@ docker run --name=ml-ops -p 5000:5000 -d yevdeveloper/ml-ops:latest
   ```
 
 #### Testing
-curl -g http://localhost:5000/predict     --data-urlencode 'json={"data":{"names":["a","b"],"tensor":{"shape":[2,2],"values":[0,0,1,1]}}}'
+
+
+1. Single request
+   
+```bash
+
+curl -X POST "http://127.0.0.1:8000/predict" \
+-H "Content-Type: application/json" \
+-d '{"data": [85]}'
+
+```
+
+ Or you can simulate sending a 1000 requests using the `simulate_requests.sh` script to view metrics in log file.
 
 #### To delete all images
 
@@ -117,29 +133,6 @@ docker rm $(docker ps -a -f status=exited -q)
 #### To delete containers which are in created state
 
 docker rm $(docker ps -a -f status=created -q)
-
-
-### Troubleshooting
-
-docker history yevdeveloper/ml-ops
-
-### OpenShift integration
-
-Build from repository
-oc new-app --name=ml-ops https://github.com/yev-dev/ml-ops.git --strategy=docker
-oc new-app --name=ml-ops git@github.com:yev-dev/ml-ops.git --context-dir=worker
-oc new-app --name=ml-ops git@github.com:yev-dev/ml-ops.git#branch
-
-Build from local copy
-
-
-curl -g http://ml-ops-ml-pipeline.192.168.99.101.nip.io/predict --data-urlencode 'json={"data":{"names":["a","b"],"tensor":{"shape":[2,2],"values":[0,0,1,1]}}}'
-
-#### Useful commands:
-oc get endpoints
-oc get route
-oc get is -> Streams repo
-
 
 
 ### Troubleshooting

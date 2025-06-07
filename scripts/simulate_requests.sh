@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# This script simulates sending 1000 requests to a prediction service
+# with random data for wine quality prediction.
+# Ensure the service is running before executing this script.
+# Usage: ./simulate_requests.sh
+
+
 for i in {1..1000}
 do
   # Generate random data

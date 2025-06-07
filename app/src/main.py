@@ -66,12 +66,12 @@ async def predict(
 
     try:
 
-        request_data = input_data.data
-
         prediction = loaded_model.predict([input_data.data])[0]
 
     except Exception as e:
+        print(f"Failed to run model eferience with {e} error")
         raise e
+        
     finally:
         elapsed_time = time.time() - start_time
 

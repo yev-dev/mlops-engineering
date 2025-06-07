@@ -18,3 +18,5 @@ yfinance
 bs4
 nbformat
 nbconvert
+fastapi
+uvicorn
