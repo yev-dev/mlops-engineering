@@ -5,7 +5,6 @@ statsmodels
 scikit-learn
 scipy
 matplotlib
-plotly
 seaborn
 tqdm
 tabulate

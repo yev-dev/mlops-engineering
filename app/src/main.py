@@ -12,6 +12,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware  # Import CORS middleware
 from pydantic import BaseModel
 
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 PARENT_DIR = os.path.dirname(BASE_DIR)
