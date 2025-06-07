@@ -6,6 +6,8 @@
 # Usage: ./simulate_requests.sh
 
 
+MODEL_SERVICE_PORT=5000
+
 for i in {1..1000}
 do
   # Generate random data
@@ -15,7 +17,7 @@ do
 json_data="{\"data\": [$stock_prices]}"
 
 # Send the curl request
-curl -X POST "http://127.0.0.1:8000/predict" \
+curl -X POST "http://localhost:${MODEL_SERVICE_PORT}/predict" \
       -H "Content-Type: application/json" \
       -d "$json_data"
 
