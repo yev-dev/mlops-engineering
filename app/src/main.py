@@ -41,15 +41,6 @@ class PredictionInput(BaseModel):
     data: list
 
 
-@app.on_event("startup")
-async def startup_event():
-    print("Starting up the FastAPI application...")
-
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    print("Shutting down the FastAPI application...")
-
 # Lifespan context manager for startup and shutdown events
 @asynccontextmanager
 async def lifespan(app: FastAPI):

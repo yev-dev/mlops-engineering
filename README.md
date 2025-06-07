@@ -76,12 +76,32 @@ docker run --name=ml-ops --rm -p 5000:5000 -d yevdeveloper/ml-ops:latest
 
 docker run --name=ml-ops -p 5000:5000 -d yevdeveloper/ml-ops:latest
 
-#### Check stdout
-docker logs ml-ops
-docker logs -f ml-ops
 
-#### Login running docker container
-docker exec -it ml-ops  bash
+
+#### Containers maintenance
+
+* Check stdout
+  ```bash
+  docker logs ml-ops
+  docker logs -f ml-ops
+  ```
+
+* Login running docker container
+  ```bash
+  docker exec -it ml-ops  bash
+  ```
+
+* Stopping containers
+  ```bash
+  docker stop $(docker ps -a -q)
+  ```
+
+* Removing containers
+  ```bash
+  docker rm $(docker ps -a -q)
+
+  docker container prune
+  ```
 
 #### Testing
 curl -g http://localhost:5000/predict     --data-urlencode 'json={"data":{"names":["a","b"],"tensor":{"shape":[2,2],"values":[0,0,1,1]}}}'
