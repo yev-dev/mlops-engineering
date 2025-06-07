@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  ml_app:
+    build:
+      context: ./app
+    restart: unless-stopped
+    container_name: ml_app
+    ports:
+      - 5000:5000
+
+
+
+  prometheus:
+    image: prom/prometheus:latest
+    restart: unless-stopped
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+

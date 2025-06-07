@@ -10,7 +10,8 @@ MODEL_SERVICE_PORT=5000
 
 for i in {1..1000}
 do
-  # Generate random data
+  # Generate random pricing data with a range of 80 to 85
+  # This simulates stock prices for a prediction service
   stock_prices=$(awk -v min=80 -v max=85 'BEGIN{srand(); print min+rand()*(max-min)}')
 
   # Construct the JSON payload
