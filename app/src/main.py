@@ -28,11 +28,11 @@ PARENT_DIR = os.path.dirname(BASE_DIR)
 DATA_DIR = os.getenv("DATA_DIR", os.path.join(PARENT_DIR, "data"))
 
 
-# loaded_model = None
-
 # Create Prometheus metrics
 cpu_usage_gauge = Gauge("cpu_usage_percent", "CPU usage percentage")
 memory_usage_gauge = Gauge("memory_usage_bytes", "Memory usage in bytes")
+prediction_gauge = Gauge("model_prediction", "Model prediction value")
+model_latency = Gauge("model_latency_seconds", "Time taken for model prediction")
 
 # Counters
 request_counter = Counter("total_requests", "Total number of prediction requests")
@@ -40,6 +40,19 @@ success_counter = Counter(
     "successful_predictions", "Total number of successful predictions"
 )
 failure_counter = Counter("failed_predictions", "Total number of failed predictions")
+
+# Histograms for latency
+latency_histogram = Histogram(
+    "request_latency_seconds",
+    "Request latency in seconds",
+    buckets=(0.1, 0.5, 1, 2.5, 5, 10),  # Customize buckets as needed
+)
+
+# Histogram for prediction values
+prediction_histogram = Histogram(
+    "prediction_values", "Distribution of prediction values"
+)
+
 
 app = FastAPI(debug=True)
 
@@ -122,19 +135,24 @@ async def predict(
 
     try:
 
-        prediction = loaded_model.predict([input_data.data])[0]
+        prediction_value = loaded_model.predict([input_data.data])[0]
+        prediction_gauge.set(prediction_value)
+        prediction_histogram.observe(prediction_value)
 
         success_counter.inc()
 
     except Exception as e:
         print(f"Failed to run model eferience with {e} error")
+        failure_counter.inc()
         raise e
         
     finally:
         elapsed_time = time.time() - start_time
 
+        latency_histogram.observe(elapsed_time)
+
         results = {
-            "prediction": prediction.tolist(),
+            "prediction": prediction_value.tolist(),
             "timestamp": datetime.datetime.now().isoformat(),
         }
         if debug:
