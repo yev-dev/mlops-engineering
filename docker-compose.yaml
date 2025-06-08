@@ -9,8 +9,6 @@ services:
     ports:
       - 5000:5000
 
-
-
   prometheus:
     image: prom/prometheus:latest
     restart: unless-stopped
@@ -20,4 +18,16 @@ services:
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 
+  grafana-dashboard:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    env_file:
+      - ./grafana/config.monitoring
 
