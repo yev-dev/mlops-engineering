@@ -6,8 +6,6 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
     
-# Set the working directory inside the container
-# COPY ./requirements.txt /src/requirements.txt
 
 ENV PYTHONUNBUFFERED=1
 
