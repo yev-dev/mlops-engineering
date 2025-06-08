@@ -12,27 +12,18 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware  # Import CORS middleware
 from pydantic import BaseModel
 
+
+# Suppress warnings 
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
 PARENT_DIR = os.path.dirname(BASE_DIR)
 DATA_DIR = os.getenv("DATA_DIR", os.path.join(PARENT_DIR, "data"))
 
-if not os.path.exists(DATA_DIR):
-    raise FileNotFoundError(f"Data directory not found at {DATA_DIR}. Please ensure the data directory is available.")
 
-
-# Load the model from a pickle file
-model_path = os.path.join(DATA_DIR, "regression_model.pkl")
-
-try:
-    with open(model_path, "rb") as model_file:
-        loaded_model = pickle.load(model_file)
-except FileNotFoundError:
-    raise FileNotFoundError(f"Model file not found at {model_path}. Please ensure the model is available.") 
+loaded_model = None
 
 app = FastAPI()
 
@@ -44,9 +35,30 @@ class PredictionInput(BaseModel):
 # Lifespan context manager for startup and shutdown events
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+
     print("Application startup")
+
+    if not os.path.exists(DATA_DIR):
+        raise FileNotFoundError(f"Data directory not found at {DATA_DIR}. Please ensure the data directory is available.")
+
+    print("Load the model from a pickle file")
+
+    model_path = os.path.join(DATA_DIR, "regression_model.pkl")
+
+    try:
+        with open(model_path, "rb") as model_file:
+            loaded_model = pickle.load(model_file)
+    except FileNotFoundError:
+        raise FileNotFoundError(f"Model file not found at {model_path}. Please ensure the model is available.") 
+
+    print("Model loaded and cached at startup")
+
     yield
-    print("Application shutdown")       
+
+    print("Application shutdown")
+
+# Assign the lifespan context manager to the app
+app.router.lifespan_context = lifespan
 
 @app.get("/")
 def doc():
@@ -61,6 +73,11 @@ def doc():
 async def predict(
     input_data: PredictionInput,
     debug: bool = False):
+    
+    global loaded_model
+    
+    if loaded_model is None:
+        raise RuntimeError("Model is not loaded. Please ensure the application has started correctly.")
     
     start_time = time.time()
 
