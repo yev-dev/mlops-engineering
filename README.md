@@ -5,9 +5,10 @@ Machine Learning engineering project for models deployment to showcase front-to-
 We use simple linear regression model that was trained to predict a stock price (Exxon Mobile stock) based on Oil prices. Model training is not in scope for this project. Pre-trained model serialised and saved to be loaded into memory for service predictions.
 
 * FastAPI service for model inference (http://localhost:5000/redoc)
-* Prometheus for monitoring
+* Prometheus for monitoring (http://localhost:9090)
+* Grafana dashboard for monitoring metrics integration (http://localhost:3000)
 * Evidently for Data/Logical drift (WIP)
-* Grafana for logs integration (TODO)
+
 * MinIO for persistent layer (TODO)
 * MLFlow for model training, features store, models registry (TODO) 
 
@@ -16,12 +17,20 @@ Model Service API definition
 
 ![Open API definition](docs/images/ServiceAPI.png)
 
+## How to run
+
+1. Build and run the containers with `docker-compose`
+
+    ```bash
+    docker compose up -d --build
+    ```
+
 
 ### Local Development Setup
 
 ## Model Envrionment Setup and Development
 
-### Local Development Setup
+### Local Development Setup and dependencies management
 
 Python dependencies are managed by [pip-tools](https://pypi.org/project/pip-tools/). You need to create conda or venv for your env first.
 
@@ -89,6 +98,7 @@ pip-compile requirements.in
 docker build . -t yevdeveloper/ml-ops:latest
 
 #### Start a container with a given name
+
 docker run --name=ml-ops --rm -p 5000:5000 -d yevdeveloper/ml-ops:latest
 
 docker run --name=ml-ops -p 5000:5000 -d yevdeveloper/ml-ops:latest
