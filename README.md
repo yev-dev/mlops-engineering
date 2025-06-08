@@ -1,6 +1,22 @@
 # MLOps Engineering Project
 
-Machine Learning engineering project for models deployment
+Machine Learning engineering project for models deployment to dhowcase front-to-back modern way of deploying and running ML models in production. 
+
+We use simple linear regression model that was trained to predict a stock price (Exxon Mobile stock) based on Oil price. Model training is outside of the scope of this project. Pre-trained model serialised and saved to be loaded into memory for evaluation.
+
+* FastAPI service for model inference
+* Prometheus for monitoring
+* Evidently for Data/Logical drift (WIP)
+* Grafana for logs integration (TODO)
+* MLFlow for model training, features store, models registry (TODO) 
+
+
+Model Service API definition
+
+![Open API definition](docs/images/ServiceAPI.png)
+
+
+### Local Development Setup
 
 ## Model Envrionment Setup and Development
 
