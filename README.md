@@ -17,6 +17,9 @@ Model Service API definition
 
 ![Open API definition](docs/images/ServiceAPI.png)
 
+
+![ML Metrics Dashboard](docs/images/GrafanaMLMetricsDashboard.png)
+
 ## How to run
 
 1. Build and run the containers with `docker-compose`
