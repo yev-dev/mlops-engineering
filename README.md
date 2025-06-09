@@ -8,15 +8,16 @@ We use simple linear regression model that was trained to predict a stock price 
 * Prometheus for monitoring (http://localhost:9090)
 * Grafana dashboard for monitoring metrics integration (http://localhost:3000)
 * Evidently for Data/Logical drift (WIP)
-
 * MinIO for persistent layer (TODO)
 * MLFlow for model training, features store, models registry (TODO) 
 
 
 Model Service API definition
 
+
 ![Open API definition](docs/images/ServiceAPI.png)
 
+Grafana ML Metrics Dashboard
 
 ![ML Metrics Dashboard](docs/images/GrafanaMLMetricsDashboard.png)
 
