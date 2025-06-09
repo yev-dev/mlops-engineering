@@ -20,3 +20,5 @@ nbformat
 nbconvert
 fastapi
 uvicorn
+prometheus_client
+prometheus_fastapi_instrumentator

@@ -1,5 +1,8 @@
 FROM python:3.11-slim
 
+LABEL maintainer="Yevgeniy Yermoshin, yev.developer@gmail.com"
+LABEL version="1.0"
+LABEL description="Dockerfile for FastAPI application with ML model serving"
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     build-essential \

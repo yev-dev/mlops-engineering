@@ -279,7 +279,12 @@ platformdirs==4.3.8
 pluggy==1.6.0
     # via pytest
 prometheus-client==0.22.1
-    # via jupyter-server
+    # via
+    #   -r requirements.in
+    #   jupyter-server
+    #   prometheus-fastapi-instrumentator
+prometheus-fastapi-instrumentator==7.1.0
+    # via -r requirements.in
 prompt-toolkit==3.0.51
     # via
     #   ipython
@@ -375,7 +380,9 @@ soupsieve==2.7
 stack-data==0.6.3
     # via ipython
 starlette==0.46.2
-    # via fastapi
+    # via
+    #   fastapi
+    #   prometheus-fastapi-instrumentator
 statsmodels==0.14.4
     # via -r requirements.in
 tabulate==0.9.0
@@ -450,7 +457,7 @@ websockets==15.0.1
     # via yfinance
 widgetsnbextension==4.0.14
     # via ipywidgets
-yfinance==0.2.61
+yfinance==0.2.62
     # via -r requirements.in
 
 # The following packages are considered to be unsafe in a requirements file:
