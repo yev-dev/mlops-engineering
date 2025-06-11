@@ -21,6 +21,11 @@ Grafana ML Metrics Dashboard
 
 ![ML Metrics Dashboard](docs/images/GrafanaMLMetricsDashboard.png)
 
+## CI/CD Pipeline
+
+![API Service Build](docs/images/AppGithubActions.png)
+
+
 ## How to run
 
 1. Build and run the containers with `docker-compose`
@@ -110,7 +115,7 @@ docker run --name=ml-ops -p 5000:5000 -d yevdeveloper/ml-ops:latest
 docker run --name=ml-ops -d yevdeveloper/ml-ops:latest
 
 
-#### Containers maintenance
+#### Individual Containers maintenance
 
 * Check stdout
   ```bash
