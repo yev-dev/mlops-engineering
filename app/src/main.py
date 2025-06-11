@@ -115,7 +115,14 @@ def doc():
         "documentation": "If you want to see the OpenAPI specification, navigate to the /redoc/ path on this server."
     }
 
+class ParamMessage(BaseModel):
+    text: str
 
+@app.post("/")
+async def message(
+    input_data: PredictionInput):
+
+    return "You wrote: " + str(input_data.data)
 
 @app.post("/predict")
 async def predict(
@@ -134,6 +141,7 @@ async def predict(
     start_time = time.time()
 
     try:
+        results = {}
 
         prediction_value = loaded_model.predict([input_data.data])[0]
         prediction_gauge.set(prediction_value)
@@ -145,16 +153,16 @@ async def predict(
         print(f"Failed to run model eferience with {e} error")
         failure_counter.inc()
         raise e
+    else:
+        results.update({"prediction": prediction_value.tolist()})
         
     finally:
         elapsed_time = time.time() - start_time
 
         latency_histogram.observe(elapsed_time)
 
-        results = {
-            "prediction": prediction_value.tolist(),
-            "timestamp": datetime.datetime.now().isoformat(),
-        }
+        results.update({"timestamp": datetime.datetime.now().isoformat()})
+        
         if debug:
             print(f"Prediction took {elapsed_time:.2f} seconds")
             
