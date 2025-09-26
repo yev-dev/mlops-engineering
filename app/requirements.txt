@@ -11,8 +11,6 @@ anyio==4.9.0
     #   httpx
     #   jupyter-server
     #   starlette
-appnope==0.1.4
-    # via ipykernel
 argon2-cffi==25.1.0
     # via jupyter-server
 argon2-cffi-bindings==21.2.0
@@ -169,7 +167,7 @@ jupyter-server==2.16.0
     #   notebook-shim
 jupyter-server-terminals==0.5.3
     # via jupyter-server
-jupyterlab==4.4.3
+jupyterlab==4.4.8
     # via
     #   jupyter
     #   notebook
